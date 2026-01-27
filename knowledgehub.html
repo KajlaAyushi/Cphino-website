@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Knowledge Hub | CPHINO</title>
+
+  <style>
+    body { font-family: Arial; background:#f5f5f5; }
+    .post-card {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    }
+    .share a {
+      background:#0a66c2;
+      color:#fff;
+      padding:6px 12px;
+      text-decoration:none;
+      border-radius:6px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1 style="text-align:center">📚 Knowledge Hub</h1>
+<div id="postsList"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import {
+    getFirestore,
+    collection,
+    getDocs,
+    query,
+    orderBy
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDlnHswacdCS03as6OXsdkrvAVNBMk1uv4",
+    authDomain: "cphino-knowledgehub.firebaseapp.com",
+    projectId: "cphino-knowledgehub",
+    storageBucket: "cphino-knowledgehub.appspot.com",
+    messagingSenderId: "1047808575898",
+    appId: "1:1047808575898:web:dcb42a93d286303d35d223"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const postsContainer = document.getElementById("postsList");
+
+  async function loadPosts() {
+    const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      postsContainer.innerHTML = "<p style='text-align:center'>No posts yet.</p>";
+      return;
+    }
+
+    postsContainer.innerHTML = "";
+
+    snapshot.forEach(doc => {
+      const d = doc.data();
+      postsContainer.innerHTML += `
+        <div class="post-card">
+          <h3>${d.title}</h3>
+          <p>${d.content}</p>
+          <div class="share">
+            <a target="_blank"
+              href="https://www.linkedin.com/sharing/share-offsite/?url=${location.href}">
+              Share on LinkedIn
+            </a>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  loadPosts();
+</script>
+
+</body>
+</html>

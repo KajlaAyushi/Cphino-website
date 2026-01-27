@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Admin | CPHINO Knowledge Hub</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .box {
+      max-width: 720px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,.1);
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    .card {
+      border-top: 1px solid #ddd;
+      margin-top: 12px;
+      padding-top: 12px;
+    }
+    button {
+      padding: 6px 12px;
+      margin-right: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="box" id="adminLogin">
+  <h2>Admin Login</h2>
+  <input type="email" id="adminEmail" placeholder="Email">
+  <input type="password" id="adminPass" placeholder="Password">
+  <button id="loginBtn">Login</button>
+  <p id="loginMsg"></p>
+</div>
+
+<!-- POST FORM -->
+<div class="box" id="postForm" style="display:none;">
+  <h2>Create / Edit Post</h2>
+
+  <input type="text" id="postTitle" placeholder="Post Title">
+  <textarea id="postContent" rows="6" placeholder="Post Content"></textarea>
+  <button id="submitPost">Publish</button>
+
+  <h3>Existing Posts</h3>
+  <div id="postsList"></div>
+</div>
+
+<script type="module" src="firebase.js"></script>
+<script type="module" src="knowledgehub.js"></script>
+
+</body>
+</html>

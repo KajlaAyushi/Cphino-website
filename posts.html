@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin – Publish Post</title>
+</head>
+<body>
+
+<h2>Admin Login</h2>
+
+<div id="loginBox">
+  <input type="email" id="email" placeholder="Admin Email"><br><br>
+  <input type="password" id="password" placeholder="Password"><br><br>
+  <button id="loginBtn">Login</button>
+</div>
+
+<div id="adminBox" style="display:none;">
+  <h2>Create Post</h2>
+  <input type="text" id="title" placeholder="Post Title"><br><br>
+  <textarea id="content" placeholder="Post Content"></textarea><br><br>
+  <button id="publishBtn">Publish</button><br><br>
+  <button id="logoutBtn">Logout</button>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
+    from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+  import { getFirestore, collection, addDoc, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDlnHswacdCS03as6OXsdkrvAVNBMk1uv4",
+    authDomain: "cphino-knowledgehub.firebaseapp.com",
+    projectId: "cphino-knowledgehub",
+    storageBucket: "cphino-knowledgehub.firebasestorage.app",
+    messagingSenderId: "1047808575898",
+    appId: "1:1047808575898:web:dcb42a93d286303d35d223"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  const loginBox = document.getElementById("loginBox");
+  const adminBox = document.getElementById("adminBox");
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      loginBox.style.display = "none";
+      adminBox.style.display = "block";
+    } else {
+      loginBox.style.display = "block";
+      adminBox.style.display = "none";
+    }
+  });
+
+  document.getElementById("loginBtn").onclick = () => {
+    signInWithEmailAndPassword(
+      auth,
+      email.value,
+      password.value
+    ).catch(err => alert(err.message));
+  };
+
+  document.getElementById("publishBtn").onclick = async () => {
+    await addDoc(collection(db, "posts"), {
+      title: title.value,
+      content: content.value,
+      createdAt: serverTimestamp()
+    });
+    alert("Post Published Successfully");
+    title.value = "";
+    content.value = "";
+  };
+
+  document.getElementById("logoutBtn").onclick = () => {
+    signOut(auth);
+  };
+</script>
+
+</body>
+</html>
